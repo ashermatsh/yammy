@@ -72,12 +72,12 @@ public class starting_page extends javax.swing.JPanel {
         add(jButton3);
         jButton3.setBounds(240, 250, 490, 90);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/static/main_logo.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/yammy/main_logo.png"))); // NOI18N
         add(jLabel3);
         jLabel3.setBounds(280, 40, 510, 240);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 51));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/static/startpage_background.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/yammy/startpage_background.png"))); // NOI18N
         jLabel2.setText("logo");
         add(jLabel2);
         jLabel2.setBounds(0, 0, 1000, 1000);
