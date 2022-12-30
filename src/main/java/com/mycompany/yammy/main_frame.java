@@ -66,8 +66,13 @@ public class main_frame extends javax.swing.JFrame {
                 
                 main_frame mf=new main_frame();
                 starting_page starting_page1=new starting_page();
+                browse_page browse_page1=new browse_page();
+                addrecipe_page addrecipe_page1=new addrecipe_page();
+                calorie_page calorie_page1=new calorie_page();
                 mf.getContentPane().add(starting_page1,"starting_page");
-                
+                mf.getContentPane().add(browse_page1,"browse_page");
+                mf.getContentPane().add(addrecipe_page1,"addrecipe_page");
+                mf.getContentPane().add(calorie_page1,"calorie_page");
                 mf.setVisible(true);
             }
         });
