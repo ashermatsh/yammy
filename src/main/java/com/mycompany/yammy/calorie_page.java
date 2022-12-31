@@ -9,12 +9,22 @@ import java.awt.CardLayout;
  * @author Asher
  */
 public class calorie_page extends javax.swing.JPanel {
+    private void display_recipes(){
+        recipe_block rb1=new recipe_block("Recipe 1","recipe body 1");
+        recipe_block rb2=new recipe_block("Recipe 2","recipe body 2");
+        rb1.setBounds(130,300,rb1.getMaximumSize().width,rb1.getMaximumSize().height);
+        this.add(rb1);
+        rb2.setBounds(130,500,rb2.getMaximumSize().width,rb2.getMaximumSize().height);
+        this.add(rb2);
+        // TODO : get recipes from the database and display it.
+    }
 
     /**
      * Creates new form calorie_page
      */
     public calorie_page() {
         initComponents();
+        display_recipes();
     }
 
     /**
@@ -28,6 +38,8 @@ public class calorie_page extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
+        jLabel2 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
@@ -43,16 +55,25 @@ public class calorie_page extends javax.swing.JPanel {
             }
         });
 
+        jLabel2.setText("Enter you calorie range");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jButton1)
-                .addGap(293, 293, 293)
-                .addComponent(jLabel1)
-                .addContainerGap(386, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jButton1)
+                        .addGap(293, 293, 293)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(242, 242, 242)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))))
+                .addContainerGap(232, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,7 +85,11 @@ public class calorie_page extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jButton1)))
-                .addContainerGap(917, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(776, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -78,5 +103,7 @@ public class calorie_page extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
 }
