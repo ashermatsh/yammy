@@ -4,6 +4,8 @@
  */
 package com.mycompany.yammy;
 import java.awt.CardLayout;
+import java.sql.*;
+import java.util.ArrayList;
 /**
  *
  * @author Asher
@@ -13,21 +15,53 @@ public class browse_page extends javax.swing.JPanel {
     /**
      * Creates new form browse_page
      */
+    
+    ArrayList<String> ingredients=new ArrayList<String>();
     private void display_recipes(){
-        recipe_block rb1=new recipe_block("Recipe 1","recipe body 1");
-        recipe_block rb2=new recipe_block("Recipe 2","recipe body 2");
-        rb1.setBounds(130,300,rb1.getMaximumSize().width,rb1.getMaximumSize().height);
-        this.add(rb1);
-        rb2.setBounds(130,500,rb2.getMaximumSize().width,rb2.getMaximumSize().height);
-        this.add(rb2);
+
         // TODO : get recipes from the database and display it.
+        String ingredient_list_string=new String("");
+        for(int i=0;i<ingredients.size();++i){
+            ingredient_list_string+=String.format("'%s'", ingredients.get(i));
+            if(i!=ingredients.size()-1){
+                ingredient_list_string+=",";
+            }
+        }
+//        System.out.println(ingredient_list_string);
+        String query="";
+        if(!ingredients.isEmpty()){
+            query=String.format("select distinct Recipe.recipe_id,recipe_name,recipe_body from recipe,recipe_ingredients,ingredient where recipe.recipe_id=recipe_ingredients.recipe_id and ingredient.ingredient_id=recipe_ingredients.ingredient_id and ingredient.ingredient_name in (%s);", ingredient_list_string);
+        }else{
+            query="select * from recipe";
+        }
+//        System.out.println(query);
+        Connection conn=Yammy.conn;
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            int columnsNumber=rs.getMetaData().getColumnCount();
+            int i=0;
+            while (rs.next()) {
+                
+                System.out.println(rs.getString("recipe_name"));
+                System.out.println(rs.getString("recipe_body"));
+                recipe_block rb=new recipe_block(rs.getString("recipe_name"),rs.getString("recipe_body"));
+                rb.setBounds(130,300+(i*200),rb.getMaximumSize().width,rb.getMaximumSize().height);
+                this.add(rb);
+                i++;
+            }
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        this.repaint();
+        this.validate();
     }
     public browse_page() {
         initComponents();
         display_recipes();
         this.validate();
-        this.repaint();
-        
+        this.repaint(); 
     }
 
     /**
@@ -45,6 +79,7 @@ public class browse_page extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
@@ -66,9 +101,9 @@ public class browse_page extends javax.swing.JPanel {
         add(jButton1);
         jButton1.setBounds(23, 28, 36, 37);
 
-        jLabel4.setText("Ingredients : ");
+        jLabel4.setText("Ingredients  : ");
         add(jLabel4);
-        jLabel4.setBounds(250, 150, 68, 16);
+        jLabel4.setBounds(240, 150, 71, 16);
 
         jButton2.setText("Add Ingredient");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -90,10 +125,18 @@ public class browse_page extends javax.swing.JPanel {
         jLabel2.setText("Search Based on the ingredients you gave");
         add(jLabel2);
         jLabel2.setBounds(360, 110, 240, 16);
+        add(jLabel3);
+        jLabel3.setBounds(320, 150, 680, 20);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        ingredients.add(jTextField1.getText());
+        jTextField1.setText("");
+        jLabel3.setText(String.join(" , ", ingredients));
+        display_recipes();
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -113,6 +156,7 @@ public class browse_page extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables

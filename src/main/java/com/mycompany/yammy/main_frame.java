@@ -2,7 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
 package com.mycompany.yammy;
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.*;
 
 /**
  *
@@ -35,7 +42,25 @@ public class main_frame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    public static void databasetest(){      // Function for testing the database and running a sample query.
+        Connection conn=Yammy.conn;
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM recipe_ingredients;");
+            int columnsNumber=rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                if (i > 1) System.out.print(" | ");
+                System.out.print(rs.getString(i));
+            }
+            System.out.println("");
+            }
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+    }
     public static void display() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -74,6 +99,7 @@ public class main_frame extends javax.swing.JFrame {
                 mf.getContentPane().add(addrecipe_page1,"addrecipe_page");
                 mf.getContentPane().add(calorie_page1,"calorie_page");
                 mf.setVisible(true);
+//                databasetest();
             }
         });
     }
