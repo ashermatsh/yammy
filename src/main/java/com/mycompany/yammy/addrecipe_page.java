@@ -4,6 +4,8 @@
  */
 package com.mycompany.yammy;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.sql.*;
 /**
  *
  * @author Asher
@@ -13,8 +15,47 @@ public class addrecipe_page extends javax.swing.JPanel {
     /**
      * Creates new form addrecipe_page
      */
+    ArrayList<String> ingredients=new ArrayList<String>();
+    
     public addrecipe_page() {
         initComponents();
+    }
+    public static void add_recipe(String recipe_name,String recipe_body,ArrayList<String> ingredients){ // The signature of the method is like this because it needs to be called from anywhere.
+        
+        Connection conn=Yammy.conn;
+        int recipe_id=1;
+        if("".equals(recipe_name) || "".equals(recipe_body))return;
+        
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select count(*) from recipe");
+            rs.next();
+            int columnsNumber=Integer.parseInt(rs.getString("count(*)"));
+            recipe_id=columnsNumber+1;
+//            System.out.println(columnsNumber);
+            String query=String.format("insert into recipe values(%d,'%s','%s',%d,%d);",recipe_id,recipe_name,recipe_body,1,1000);
+            System.out.println(query);
+            stmt.executeUpdate(query);
+            System.out.println("Recipe inserted");
+            
+            
+            
+            // Need to add ingredients
+            for(int i=0;i<ingredients.size();++i){
+                String ingredient=ingredients.get(i);
+                 rs=stmt.executeQuery(String.format("select ingredient_id from ingredient where ingredient_name='%s'",ingredient));
+                 if(rs.next()){
+                    int ingredient_id=Integer.parseInt(rs.getString("ingredient_id"));
+                    query=String.format("insert into recipe_ingredients values(%d,%d,%d,'%s')",recipe_id,ingredient_id,10,"no");
+                    stmt.executeUpdate(query);
+                 }else{
+                     System.out.println("No such ingredient as "+ingredient);
+                     // TODO : Need to handle the case where there is no such ingredient.
+                 }
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -37,6 +78,7 @@ public class addrecipe_page extends javax.swing.JPanel {
         jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
@@ -67,6 +109,11 @@ public class addrecipe_page extends javax.swing.JPanel {
         jLabel3.setText("Enter Recipe Body");
 
         jButton2.setText("Submit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,6 +124,11 @@ public class addrecipe_page extends javax.swing.JPanel {
         jLabel4.setText("Ingredients");
 
         jButton3.setText("Add Ingredient");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -92,11 +144,14 @@ public class addrecipe_page extends javax.swing.JPanel {
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(31, 31, 31)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(428, 428, 428)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jButton1)
@@ -116,8 +171,12 @@ public class addrecipe_page extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+                        .addGap(3, 3, 3)))
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
@@ -150,6 +209,18 @@ public class addrecipe_page extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        ingredients.add(jTextField2.getText());
+        jTextField2.setText("");
+        jLabel5.setText(String.join(" , ", ingredients));
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        add_recipe(jTextField1.getText(),jTextArea1.getText(), ingredients);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -159,6 +230,7 @@ public class addrecipe_page extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;

@@ -6,6 +6,7 @@ package com.mycompany.yammy;
 import java.awt.CardLayout;
 import java.sql.*;
 import java.util.ArrayList;
+import java.awt.Component;
 /**
  *
  * @author Asher
@@ -17,11 +18,26 @@ public class browse_page extends javax.swing.JPanel {
      */
     
     ArrayList<String> ingredients=new ArrayList<String>();
-    private void display_recipes(){
+    public void display_recipes(){
+        
+        
+        for(Component c:this.getComponents()){//Clear the current recipes
+            if(c instanceof recipe_block){
+                this.remove(c);
+                System.out.println(c+" removed");
+            } 
+            
+        }
+        for(Component c:main_frame.mf.getContentPane().getComponents()){
+            if(c instanceof recipe_page){
+                main_frame.mf.getContentPane().remove(c);
+                System.out.println(c+" removed");
+            }
+        }
 
         // TODO : get recipes from the database and display it.
         String ingredient_list_string=new String("");
-        for(int i=0;i<ingredients.size();++i){
+        for(int i=0;i<ingredients.size();++i){ //Combine the elemts in the ingredients array for passing it in the query.
             ingredient_list_string+=String.format("'%s'", ingredients.get(i));
             if(i!=ingredients.size()-1){
                 ingredient_list_string+=",";
@@ -34,7 +50,7 @@ public class browse_page extends javax.swing.JPanel {
         }else{
             query="select * from recipe";
         }
-//        System.out.println(query);
+        System.out.println(query);
         Connection conn=Yammy.conn;
         try{
             Statement stmt = conn.createStatement();
@@ -46,8 +62,10 @@ public class browse_page extends javax.swing.JPanel {
                 System.out.println(rs.getString("recipe_name"));
                 System.out.println(rs.getString("recipe_body"));
                 recipe_block rb=new recipe_block(rs.getString("recipe_name"),rs.getString("recipe_body"));
-                rb.setBounds(130,300+(i*200),rb.getMaximumSize().width,rb.getMaximumSize().height);
+                rb.setBounds(150,300+(i*120),rb.getMaximumSize().width,rb.getMaximumSize().height);
                 this.add(rb);
+                
+                System.out.println(rb+" added");
                 i++;
             }
             
@@ -80,6 +98,7 @@ public class browse_page extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
@@ -112,7 +131,7 @@ public class browse_page extends javax.swing.JPanel {
             }
         });
         add(jButton2);
-        jButton2.setBounds(690, 170, 100, 38);
+        jButton2.setBounds(660, 170, 150, 38);
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +145,16 @@ public class browse_page extends javax.swing.JPanel {
         add(jLabel2);
         jLabel2.setBounds(360, 110, 240, 16);
         add(jLabel3);
-        jLabel3.setBounds(320, 150, 680, 20);
+        jLabel3.setBounds(320, 150, 470, 20);
+
+        jButton4.setText("Clear Ingredients");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        add(jButton4);
+        jButton4.setBounds(820, 150, 130, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -148,12 +176,21 @@ public class browse_page extends javax.swing.JPanel {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        ingredients.clear();
+        display_recipes();
+        jLabel3.setText(String.join(" , ", ingredients));
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

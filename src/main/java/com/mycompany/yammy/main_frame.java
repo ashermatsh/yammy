@@ -20,6 +20,11 @@ public class main_frame extends javax.swing.JFrame {
     /**
      * Creates new form main_frame
      */
+    public static main_frame mf=new main_frame();
+    public static starting_page starting_page1=new starting_page();
+    public static browse_page browse_page1=new browse_page();
+    public static addrecipe_page addrecipe_page1=new addrecipe_page();
+    public static calorie_page calorie_page1=new calorie_page();
     public main_frame() {
         initComponents();
     }
@@ -89,11 +94,7 @@ public class main_frame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                main_frame mf=new main_frame();
-                starting_page starting_page1=new starting_page();
-                browse_page browse_page1=new browse_page();
-                addrecipe_page addrecipe_page1=new addrecipe_page();
-                calorie_page calorie_page1=new calorie_page();
+                
                 mf.getContentPane().add(starting_page1,"starting_page");
                 mf.getContentPane().add(browse_page1,"browse_page");
                 mf.getContentPane().add(addrecipe_page1,"addrecipe_page");

@@ -24,6 +24,7 @@ public class login_page extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -36,6 +37,10 @@ public class login_page extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
         setLayout(null);
+
+        jButton1.setText("Login");
+        add(jButton1);
+        jButton1.setBounds(440, 550, 110, 50);
         add(jTextField1);
         jTextField1.setBounds(370, 430, 260, 30);
         add(jTextField2);
@@ -67,7 +72,7 @@ public class login_page extends javax.swing.JPanel {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/yammy/startpage_background.png"))); // NOI18N
         jLabel2.setText("logo");
         add(jLabel2);
-        jLabel2.setBounds(0, 0, 1000, 1000);
+        jLabel2.setBounds(0, 0, 1000, 1010);
 
         jLabel4.setFont(new java.awt.Font("Maiandra GD", 0, 48)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 0));
@@ -78,6 +83,7 @@ public class login_page extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

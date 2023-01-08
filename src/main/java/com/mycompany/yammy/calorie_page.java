@@ -4,19 +4,55 @@
  */
 package com.mycompany.yammy;
 import java.awt.CardLayout;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.awt.Component;
 /**
  *
  * @author Asher
  */
 public class calorie_page extends javax.swing.JPanel {
+    
+    int min_calorie=0;
+    int max_calorie=10000;
     private void display_recipes(){
-        recipe_block rb1=new recipe_block("Recipe 1","recipe body 1");
-        recipe_block rb2=new recipe_block("Recipe 2","recipe body 2");
-        rb1.setBounds(130,300,rb1.getMaximumSize().width,rb1.getMaximumSize().height);
-        this.add(rb1);
-        rb2.setBounds(130,500,rb2.getMaximumSize().width,rb2.getMaximumSize().height);
-        this.add(rb2);
+        
         // TODO : get recipes from the database and display it.
+        
+        String query=new String("");
+        
+        if(!"".equals(jTextField1.getText()) || !"".equals(jTextField2.getText())){
+            min_calorie=Integer.parseInt(jTextField1.getText());
+            max_calorie=Integer.parseInt(jTextField2.getText());
+            
+        }
+       
+        query=String.format("select * from recipe where calorie_content>=%d and calorie_content<=%d;", min_calorie,max_calorie);
+        System.out.println(query);
+        Connection conn=Yammy.conn;
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            int columnsNumber=rs.getMetaData().getColumnCount();
+            int i=0;
+            while (rs.next()) {
+                
+                System.out.println(rs.getString("recipe_name"));
+                System.out.println(rs.getString("recipe_body"));
+                recipe_block rb=new recipe_block(rs.getString("recipe_name"),rs.getString("recipe_body"));
+                rb.setBounds(150,300+(i*120),rb.getMaximumSize().width,rb.getMaximumSize().height);
+                this.add(rb);
+                
+                System.out.println(rb+" added");
+                i++;
+            }
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        this.repaint();
+        this.validate();
     }
 
     /**
@@ -38,14 +74,20 @@ public class calorie_page extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jSlider1 = new javax.swing.JSlider();
         jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(1000, 1000));
+        setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Malgun Gothic", 0, 36)); // NOI18N
         jLabel1.setText("Calorie Tracking");
+        add(jLabel1);
+        jLabel1.setBounds(349, 6, 265, 77);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/yammy/home_icon.png"))); // NOI18N
         jButton1.setName(""); // NOI18N
@@ -54,43 +96,35 @@ public class calorie_page extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
+        add(jButton1);
+        jButton1.setBounds(20, 24, 36, 37);
 
-        jLabel2.setText("Enter you calorie range");
+        jLabel2.setText("Enter your Minimum calorie");
+        add(jLabel2);
+        jLabel2.setBounds(242, 110, 150, 16);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton1)
-                        .addGap(293, 293, 293)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(242, 242, 242)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))))
-                .addContainerGap(232, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jButton1)))
-                .addGap(27, 27, 27)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(776, Short.MAX_VALUE))
-        );
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        add(jTextField1);
+        jTextField1.setBounds(410, 107, 144, 22);
+
+        jLabel3.setText("Enter your Maximum calorie");
+        add(jLabel3);
+        jLabel3.setBounds(242, 144, 150, 16);
+        add(jTextField2);
+        jTextField2.setBounds(410, 141, 144, 22);
+
+        jButton2.setText("Apply");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        add(jButton2);
+        jButton2.setBounds(660, 120, 100, 30);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -99,11 +133,28 @@ public class calorie_page extends javax.swing.JPanel {
         layout.show(this.getParent(), "starting_page");
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        for(Component c:this.getComponents()){
+            if(c instanceof recipe_block){
+                this.remove(c);
+            }
+        }
+        display_recipes();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JSlider jSlider1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

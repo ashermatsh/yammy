@@ -102,6 +102,7 @@ public class starting_page extends javax.swing.JPanel {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         CardLayout layout=(CardLayout)this.getParent().getLayout();
+        main_frame.browse_page1.display_recipes(); // Janky way of updating the page need to udpate afterwards.
         layout.show(this.getParent(), "browse_page");
     }//GEN-LAST:event_jButton3ActionPerformed
 
