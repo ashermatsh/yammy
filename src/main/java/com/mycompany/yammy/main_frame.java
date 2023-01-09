@@ -25,6 +25,7 @@ public class main_frame extends javax.swing.JFrame {
     public static browse_page browse_page1=new browse_page();
     public static addrecipe_page addrecipe_page1=new addrecipe_page();
     public static calorie_page calorie_page1=new calorie_page();
+    public static login_page login_page1=new login_page();
     public main_frame() {
         initComponents();
     }
@@ -94,7 +95,7 @@ public class main_frame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                
+                mf.getContentPane().add(login_page1,"login_page");
                 mf.getContentPane().add(starting_page1,"starting_page");
                 mf.getContentPane().add(browse_page1,"browse_page");
                 mf.getContentPane().add(addrecipe_page1,"addrecipe_page");
